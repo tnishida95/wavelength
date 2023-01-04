@@ -1,0 +1,24 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.MuiDivider-root {
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
+}
+
+#scoreSlider > .MuiSlider-mark {
+  height: 24px
+}
+
+#scoreSlider > .MuiSlider-thumb {
+  height: 6px;
+  width: 6px;
+  color: red;
+
+#teamSlider > .MuiSlider-mark {
+  height: 12px
+}
