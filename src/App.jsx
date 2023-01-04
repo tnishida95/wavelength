@@ -1,21 +1,15 @@
 import { useState } from 'react';
 import './App.css';
 import {
-    Box, Button, Card, CardContent,
-    createTheme, Dialog, DialogTitle,
+    Box, Button,
+    createTheme, Dialog,
     Divider,
-    FormControlLabel,
-    LinearProgress,
     Paper,
-    Slider, Switch, Table, TableBody, TableCell, TableHead, TableRow,
+    Slider, Table, TableBody, TableCell, TableHead, TableRow,
     TextField,
     ThemeProvider, ToggleButton, ToggleButtonGroup,
     Typography
 } from "@mui/material";
-import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import {Calculate} from "@mui/icons-material";
 
 function App() {
 
@@ -41,6 +35,8 @@ function App() {
     const [leftOrRight, setLeftOrRight] = useState("left");
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [scoreMarks, setScoreMarks] = useState([]);
+    const [leftScore, setLeftScore] = useState(0);
+    const [rightScore, setRightScore] = useState(0);
 
     const calculatePsychicPoints = (difference) => {
         if (difference <= 2) {
@@ -98,23 +94,14 @@ function App() {
         setIsDialogOpen(true);
     };
 
-    function ScoreTrack(props) {
-        return (
-            <Box sx={{maxHeight: "500px"}}>
-                <Typography gutterBottom>{props.name}</Typography>
-                <Slider orientation="vertical" marks steps={1} min={0} max={10} />
-            </Box>
-        );
-    }
-
-    function ScoreDialog(props) {
+    function ScoreDialog() {
 
         return (
             <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
                 <Box sx={{minWidth: "500px", padding: "16px"}}>
                     <Typography gutterBottom variant="h4">Round Results</Typography>
 
-                    <Slider id="scoreSlider" track={false} marks={scoreMarks} value={[guessValue, realValue]} valueLabelDisplay="on"></Slider>
+                    <Slider id="scoreSlider" track={false} marks={scoreMarks} value={[guessValue, realValue]} valueLabelDisplay="on" />
 
                     <Table>
                         <TableHead>
@@ -133,7 +120,7 @@ function App() {
                                 <TableCell>{guessValue}</TableCell>
                                 <TableCell>{Math.abs(realValue - guessValue)}</TableCell>
                                 <TableCell>{calculatePsychicPoints(Math.abs(realValue - guessValue))}</TableCell>
-                                <TableCell>{leftOrRight.toUpperCase()}</TableCell>
+                                <TableCell>{leftOrRight}</TableCell>
                                 <TableCell>{calculateOtherPoints(realValue, guessValue)}</TableCell>
                             </TableRow>
                         </TableBody>
@@ -149,7 +136,10 @@ function App() {
                 <ScoreDialog />
                 <Typography gutterBottom variant="h3">Wavelength</Typography>
                 <Box sx={{maxWidth: "1280px", display: "grid", gridTemplateColumns: "1fr 15fr 1fr", gap: "20px"}}>
-                    <ScoreTrack name="Left"/>
+                    <Box sx={{maxHeight: "500px"}}>
+                        <Typography gutterBottom>Left</Typography>
+                        <Slider orientation="vertical" marks steps={1} min={0} max={10} value={leftScore} onChange={(event, newValue) => setLeftScore(newValue)}/>
+                    </Box>
                     <Box>
                         <Paper elevation={8} sx={{padding: "16px"}}>
                             <Divider>Psychic Phase</Divider>
@@ -158,8 +148,7 @@ function App() {
                                 <p>&nbsp;</p>
                                 <TextField placeholder="Right" variant="outlined" sx={{width: "100%"}} inputProps={{style: { textAlign: "right" }}} />
                             </Box>
-                            <Typography variant="p">Roll a d100 before continuing...</Typography>
-                            <TextField label="Give a Clue" variant="outlined" sx={{width: "100%"}} inputProps={{style: { textAlign: "center" }}}/>
+                            <TextField label="Give a clue..." variant="outlined" sx={{width: "100%"}} inputProps={{style: { textAlign: "center" }}}/>
                         </Paper>
                         <br />
 
@@ -186,11 +175,14 @@ function App() {
                             <Button variant="contained" onClick={prepareScore} sx={{height: "100%"}}>Score</Button>
                         </Paper>
                     </Box>
-                    <ScoreTrack name="Right"/>
+                    <Box sx={{maxHeight: "500px"}}>
+                        <Typography gutterBottom>Right</Typography>
+                        <Slider orientation="vertical" marks steps={1} min={0} max={10} value={rightScore} onChange={(event, newValue) => setRightScore(newValue)}/>
+                    </Box>
                 </Box>
             </ThemeProvider>
         </div>
     );
 }
 
-export default App
+export default App;
